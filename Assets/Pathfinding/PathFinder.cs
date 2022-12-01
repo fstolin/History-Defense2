@@ -24,27 +24,27 @@ public class PathFinder : MonoBehaviour
     {
         gridManager = FindObjectOfType<GridManager>();
         if (gridManager != null) grid = gridManager.Grid;
-
-        startNode = new Node(startCoordinates, true);
-        destinationNode = new Node(destinationCoordinates, true);
     }
 
     // Start is called before the first frame update
     void Start()    
     {
-        StartCoroutine(BreadthFirstSearch());
+        startNode = grid[startCoordinates];
+        destinationNode = grid[destinationCoordinates];
+
+        BreadthFirstSearch();
+        BuildPath();
     }
 
-    private IEnumerator BreadthFirstSearch()
+    private void BreadthFirstSearch()
     {
         // Is Running is required to stop the algorithm if we find the target
         bool isRunning = true;
 
         // Add the start node to the queue -> we will explore it's neighbors first
         frontier.Enqueue(startNode);
-        // We have reached the startNode -> add it to reached + it is part of our path
+        // We have reached the startNode -> add it to reached
         reached.Add(startNode.coordinates, startNode);
-        startNode.isPath = true;
 
         // While we have tiles queued and haven't reached the end, continue running
         while (frontier.Count > 0 && isRunning)
@@ -61,7 +61,6 @@ public class PathFinder : MonoBehaviour
             {
                 isRunning = false;
             }
-            yield return new WaitForSeconds(1);
         }
     }
 
@@ -84,10 +83,35 @@ public class PathFinder : MonoBehaviour
         {
             if(neighbor.isWalkable && !reached.ContainsKey(neighbor.coordinates))
             {
+                // add the connection between the neighbor & current node
+                neighbor.connectedTo = currentSearchNode;
                 reached.Add(neighbor.coordinates, neighbor);
                 frontier.Enqueue(neighbor);
             }
         }
+    }
+
+    // Returns the final path. Checks connections from the destination to start node.
+    private List<Node> BuildPath()
+    {
+        List<Node> path = new List<Node>();
+
+        // End node
+        Node currentNode = destinationNode;
+        path.Add(currentNode);
+        currentNode.isPath = true;
+
+        // Inbetween nodes
+        while (currentNode != startNode)
+        {
+            currentNode = currentNode.connectedTo;
+            path.Add(currentNode);
+            currentNode.isPath = true;
+        }
+
+        // Reverse the path
+        path.Reverse();
+        return path;
     }
 
     
