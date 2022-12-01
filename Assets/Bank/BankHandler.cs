@@ -16,7 +16,6 @@ public class BankHandler : MonoBehaviour
     {
         currentBalance = startingBalance;
         bankUI = FindObjectOfType<BankUI>();
-        Debug.Log(bankUI);
         bankUI.DisplayBankBalance(currentBalance);
     }
 

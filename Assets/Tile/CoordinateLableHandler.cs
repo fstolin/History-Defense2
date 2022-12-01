@@ -10,18 +10,20 @@ public class CoordinateLableHandler : MonoBehaviour
 
     [SerializeField] Color defaultColor = Color.white;
     [SerializeField] Color occupiedColor = Color.gray;
+    [SerializeField] Color exploredColor = Color.yellow;
+    [SerializeField] Color pathColor = new Color(1f, 0.5f, 0f);
     
 
     // Coordinates to display in 2D space
     Vector2Int coordinates = new Vector2Int();
-    MouseInputHandler mouseHandler;
     TextMeshPro label;
     bool areCoordsVisible;
+    GridManager gridManager;
 
     private void Awake()
     {
+        gridManager = FindObjectOfType<GridManager>();
         label = GetComponent<TextMeshPro>();
-        mouseHandler = GetComponentInParent<MouseInputHandler>();
         // Display the coordinates on awake -> once during gameplay.
         DisplayCoordinates();
     }
@@ -70,14 +72,27 @@ public class CoordinateLableHandler : MonoBehaviour
         }
     }
 
+    // Sets the label color according to node parameters
     private void SetLabelColor()
     {
-        if (mouseHandler.IsPlaceable)
-        {
-            label.color = defaultColor;
-        } else
+        if (gridManager == null) return;
+        // Find the node in grid with calculated coordinates from DisplayCoordinates method.
+        Node node = gridManager.GetNode(coordinates);
+        if (node == null) return;
+        // Check different states & assign colors
+        if (!node.isWalkable)
         {
             label.color = occupiedColor;
+        }
+        else if (node.isPath) {
+            label.color = pathColor;
+        }
+        else if (node.isExplored)
+        {
+            label.color = exploredColor;
+        } else
+        {
+            label.color = defaultColor;
         }
     }
 }
