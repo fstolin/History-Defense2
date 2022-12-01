@@ -75,10 +75,19 @@ public class CoordinateLableHandler : MonoBehaviour
     // Sets the label color according to node parameters
     private void SetLabelColor()
     {
-        if (gridManager == null) return;
+        if (gridManager == null)
+        {
+            label.color = Color.black;
+            return;
+        }
         // Find the node in grid with calculated coordinates from DisplayCoordinates method.
         Node node = gridManager.GetNode(coordinates);
-        if (node == null) return;
+
+        if (node == null)
+        {
+            label.color = Color.black;
+            return;
+        }
         // Check different states & assign colors
         if (!node.isWalkable)
         {
