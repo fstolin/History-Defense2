@@ -2126,11 +2126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113815ee7e062be419f66423af2b34f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSearchNode:
-    coordinates: {x: 0, y: 0}
-    isWalkable: 0
-    isExplored: 0
-    isPath: 0
+  startCoordinates: {x: 12, y: 3}
+  destinationCoordinates: {x: 3, y: 5}
 --- !u!4 &465466394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 113578267566909168, guid: 6730b00d6a89ab5429f44fa177f65b02, type: 3}
@@ -5663,7 +5660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73055e797755f148accc40934cf685e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 9, y: 7}
+  gridSize: {x: 14, y: 8}
 --- !u!4 &1109495242
 Transform:
   m_ObjectHideFlags: 0
