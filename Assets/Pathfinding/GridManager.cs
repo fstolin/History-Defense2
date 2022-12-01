@@ -25,9 +25,9 @@ public class GridManager : MonoBehaviour
     // Fill our dictionary with nodes = create the grid
     private void CreateGrid()
     {
-        for (int x = 0; x < gridSize.x; x++)
+        for (int x = 0; x <= gridSize.x; x++)
         {
-            for (int y = 0; y < gridSize.y; y++)
+            for (int y = 0; y <= gridSize.y; y++)
             {
                 Vector2Int coordinates = new Vector2Int(x, y);
                 grid.Add(coordinates, new Node(coordinates, true));
