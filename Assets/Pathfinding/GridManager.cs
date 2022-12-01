@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    // Grid dimensions
+    [SerializeField] Vector2Int gridSize;
+    Dictionary<Vector2, Node> grid = new Dictionary<Vector2, Node>();
+
+    private void Awake()
     {
-        
+        CreateGrid();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Dictionary getter - returns node
+    public Node GetNode(Vector2Int coordinates)
     {
-        
+        if (grid.ContainsKey(coordinates)) return grid[coordinates];
+        // Node doesn't exist
+        return null;
+    }
+
+    // Fill our dictionary with nodes = create the grid
+    private void CreateGrid()
+    {
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                Vector2Int coordinates = new Vector2Int(x, y);
+                grid.Add(coordinates, new Node(coordinates, true));
+            }
+        }
     }
 }
