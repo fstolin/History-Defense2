@@ -41,7 +41,11 @@ public class Tile : MonoBehaviour
             // If tower is placed, make the til implacable
             isPlaceable = !isPlaced;
             // If the tower is placed, block the node
-            if (isPlaced) gridManager.BlockNode(coordinates);
+            if (isPlaced)
+            {
+                gridManager.BlockNode(coordinates);
+                pathFinder.NotifyReceivers();
+            }
         }   
     }
 }

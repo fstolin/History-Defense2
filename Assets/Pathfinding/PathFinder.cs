@@ -69,6 +69,11 @@ public class PathFinder : MonoBehaviour
         return false;
     }
 
+    public void NotifyReceivers()
+    {
+        BroadcastMessage("RecalculatePath", SendMessageOptions.DontRequireReceiver);
+    }
+
     // Resets the QUEUE / lists for a new BFS to be succesfuly completed.
     private void ResetBFS()
     {
@@ -160,6 +165,5 @@ public class PathFinder : MonoBehaviour
         path.Reverse();
         return path;
     }
-
     
 }
