@@ -33,7 +33,6 @@ public class Tile : MonoBehaviour
     // Handle behaviour on mouse down - build a tower
     private void OnMouseDown()
     {
-        Debug.Log(pathFinder.WillBlockPath(coordinates));
         // Build a tower, if tile isWalkable and placing wouldn't block path
         if (gridManager.GetNode(coordinates).isWalkable && !pathFinder.WillBlockPath(coordinates))
         {
@@ -43,6 +42,6 @@ public class Tile : MonoBehaviour
             isPlaceable = !isPlaced;
             // If the tower is placed, block the node
             if (isPlaced) gridManager.BlockNode(coordinates);
-        }
+        }   
     }
 }

@@ -5,7 +5,10 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     [SerializeField] Vector2Int startCoordinates;
+    public Vector2Int StartCoordinates { get { return startCoordinates; } }
+
     [SerializeField] Vector2Int destinationCoordinates;
+    public Vector2Int DestinationCoordinates { get { return destinationCoordinates; } }
 
     Node startNode;
     Node destinationNode;
@@ -24,14 +27,13 @@ public class PathFinder : MonoBehaviour
     {
         gridManager = FindObjectOfType<GridManager>();
         if (gridManager != null) grid = gridManager.Grid;
+        startNode = grid[startCoordinates];
+        destinationNode = grid[destinationCoordinates];
     }
-
+    
     // Start is called before the first frame update
     void Start()    
     {
-        startNode = grid[startCoordinates];
-        destinationNode = grid[destinationCoordinates];
-
         GetNewPath();
     }
 
@@ -70,6 +72,10 @@ public class PathFinder : MonoBehaviour
     // Resets the QUEUE / lists for a new BFS to be succesfuly completed.
     private void ResetBFS()
     {
+        // Start & End nodes are walkable for enemies, but towers shouldn't be placet there.
+        startNode.isWalkable = true;
+        destinationNode.isWalkable = true;
+        // Reset lists
         gridManager.ResetNodes();
         frontier.Clear();
         reached.Clear();
