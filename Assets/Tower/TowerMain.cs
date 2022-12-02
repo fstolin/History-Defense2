@@ -48,7 +48,6 @@ public class TowerMain : MonoBehaviour
     {
         // Place tower
         GameObject tower = Instantiate(this.gameObject, position.position, Quaternion.identity);
-
         // Withdraw gold
         bank.Withdraw(price);
     }

@@ -10,6 +10,7 @@ TagManager:
   - FireVFX
   - RangeSphere
   - GoldText
+  - GridManager
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Tile
+  - PostProcessing
   - 
   - 
   - 
