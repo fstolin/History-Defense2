@@ -84,7 +84,6 @@ public class CoordinateLableHandler : MonoBehaviour
         if (gridManager == null)
         {
             label.color = Color.black;
-            Debug.Log("rip gridmanager");
             return;
         }
         // Find the node in grid with calculated coordinates from DisplayCoordinates method.
@@ -93,7 +92,6 @@ public class CoordinateLableHandler : MonoBehaviour
         if (node == null)
         {
             label.color = Color.black;
-            Debug.Log("rip node");
             return;
         }
         // Check different states & assign colors

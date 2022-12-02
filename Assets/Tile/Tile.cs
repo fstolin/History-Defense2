@@ -10,11 +10,13 @@ public class Tile : MonoBehaviour
     [SerializeField] TowerMain tower;
 
     GridManager gridManager;
+    PathFinder pathFinder;
     Vector2Int coordinates = new Vector2Int();
 
     private void Awake()
     {
         gridManager = FindObjectOfType<GridManager>();
+        pathFinder = FindObjectOfType<PathFinder>();
     }
 
     private void Start()
@@ -28,9 +30,12 @@ public class Tile : MonoBehaviour
         }
     }
 
+    // Handle behaviour on mouse down - build a tower
     private void OnMouseDown()
     {
-        if (isPlaceable)
+        Debug.Log(pathFinder.WillBlockPath(coordinates));
+        // Build a tower, if tile isWalkable and placing wouldn't block path
+        if (gridManager.GetNode(coordinates).isWalkable && !pathFinder.WillBlockPath(coordinates))
         {
             // Start placing tower
             bool isPlaced = tower.TowerPlacement(transform);

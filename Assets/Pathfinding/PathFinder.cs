@@ -32,12 +32,53 @@ public class PathFinder : MonoBehaviour
         startNode = grid[startCoordinates];
         destinationNode = grid[destinationCoordinates];
 
+        GetNewPath();
+    }
+
+    // Returns a new path
+    public List<Node> GetNewPath()
+    {
         BreadthFirstSearch();
-        BuildPath();
+        return BuildPath();
+    }
+
+    // Check whether placing a tower would block the path completely for enemies
+    public bool WillBlockPath(Vector2Int coordinates)
+    {
+        // Check the validity of coordinates
+        if (grid.ContainsKey(coordinates))
+        {
+            bool wasWalkable = grid[coordinates].isWalkable;
+            // Try blocking it ->
+            grid[coordinates].isWalkable = false;
+            // Get new path with the blocked tile
+            List<Node> newPath = GetNewPath();
+            // Reset the isWalkable parameter
+            grid[coordinates].isWalkable = wasWalkable;
+            Debug.Log(newPath.Count);
+            // Path would be blocked
+            if (newPath.Count <= 1)
+            {
+                // Return the previous path & fail (true = willBlockPath)
+                newPath = BuildPath();
+                return true;
+            }
+;        }
+        return false;
+    }
+
+    // Resets the QUEUE / lists for a new BFS to be succesfuly completed.
+    private void ResetBFS()
+    {
+        gridManager.ResetNodes();
+        frontier.Clear();
+        reached.Clear();
     }
 
     private void BreadthFirstSearch()
     {
+        // Reset lists, queues, nodes
+        ResetBFS();
         // Is Running is required to stop the algorithm if we find the target
         bool isRunning = true;
 
@@ -102,7 +143,7 @@ public class PathFinder : MonoBehaviour
         currentNode.isPath = true;
 
         // Inbetween nodes
-        while (currentNode != startNode)
+        while (currentNode.connectedTo != null)
         {
             currentNode = currentNode.connectedTo;
             path.Add(currentNode);
