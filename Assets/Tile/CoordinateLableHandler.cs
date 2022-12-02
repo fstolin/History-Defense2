@@ -22,10 +22,14 @@ public class CoordinateLableHandler : MonoBehaviour
 
     private void Awake()
     {
-        gridManager = FindObjectOfType<GridManager>();
         label = GetComponent<TextMeshPro>();
         // Display the coordinates on awake -> once during gameplay.
         DisplayCoordinates();
+    }
+
+    private void Start()
+    {
+        gridManager = FindObjectOfType<GridManager>();
     }
 
     private void Update()
@@ -49,9 +53,10 @@ public class CoordinateLableHandler : MonoBehaviour
             label.text = "";
         } else
         {
+            if (gridManager == null) return;
             // Get the coordinates from the PARENT (tile) position. Save them to our Vector2Int variable.
-            coordinates.x = Mathf.RoundToInt(transform.parent.position.x / UnityEditor.EditorSnapSettings.move.x);
-            coordinates.y = Mathf.RoundToInt(transform.parent.position.z / UnityEditor.EditorSnapSettings.move.z);
+            coordinates.x = Mathf.RoundToInt(transform.parent.position.x / gridManager.UnityGridSize);
+            coordinates.y = Mathf.RoundToInt(transform.parent.position.z / gridManager.UnityGridSize);
             // Display the coordinates
             label.text = (coordinates.x + "," + coordinates.y);
         }
@@ -69,6 +74,7 @@ public class CoordinateLableHandler : MonoBehaviour
         {
             areCoordsVisible = !areCoordsVisible;
             DisplayCoordinates();
+            SetLabelColor();
         }
     }
 
@@ -78,6 +84,7 @@ public class CoordinateLableHandler : MonoBehaviour
         if (gridManager == null)
         {
             label.color = Color.black;
+            Debug.Log("rip gridmanager");
             return;
         }
         // Find the node in grid with calculated coordinates from DisplayCoordinates method.
@@ -86,6 +93,7 @@ public class CoordinateLableHandler : MonoBehaviour
         if (node == null)
         {
             label.color = Color.black;
+            Debug.Log("rip node");
             return;
         }
         // Check different states & assign colors
