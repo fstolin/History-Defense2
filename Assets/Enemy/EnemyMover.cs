@@ -14,9 +14,8 @@ public class EnemyMover : MonoBehaviour
 
     private void OnEnable()
     {
-        RecalculatePath();
         ReturnEnemyToStart();
-        StartCoroutine(FollowPath());
+        RecalculatePath(true);
     }
 
     private void Awake()
@@ -26,11 +25,26 @@ public class EnemyMover : MonoBehaviour
         pathFinder = FindObjectOfType<PathFinder>();
     }
 
-    // Finds the path according to the path tags
-    private void RecalculatePath()
+    // Finds the path according to the path tags from the current position
+    private void RecalculatePath(bool resetPath)
     {
+        Vector2Int coordinates = new Vector2Int();
+
+        if (resetPath)
+        {
+            coordinates = pathFinder.StartCoordinates;
+        } 
+        else
+        {
+            coordinates = gridManager.GetCoordinatesFromPosition(transform.position);
+        }
+
+        // Stop following old path
+        StopAllCoroutines();
         path.Clear();
-        path = pathFinder.GetNewPath();
+        path = pathFinder.GetNewPath(coordinates);
+        // Follow assigned path
+        StartCoroutine(FollowPath());
     }
 
     // Returns / places the enemy to start position of the path
@@ -42,7 +56,8 @@ public class EnemyMover : MonoBehaviour
     // Prints all waypoints name for this enemy - COROUTINE
     IEnumerator FollowPath()
     {
-        for (int i = 0; i < path.Count; i++)
+        // i = 1 -> start from the second waypoint
+        for (int i = 1; i < path.Count; i++)
         {
             Vector3 startPosition = transform.position;
             Vector3 endPosition = gridManager.GetPositionFromCoordiantes(path[i].coordinates);

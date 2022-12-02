@@ -8,6 +8,11 @@ public class TowerMain : MonoBehaviour
 
     BankHandler bank;
 
+    private void Start()
+    {
+        StartCoroutine(Build());
+    }
+
     public bool IsEnoughGoldForPlacement()
     {
         if (bank.CurrentBalance >= price)
@@ -27,10 +32,7 @@ public class TowerMain : MonoBehaviour
         if (bank == null) return false;
         if (IsEnoughGoldForPlacement())
         {
-            // Place tower
-            Instantiate(this.gameObject, position.position, Quaternion.identity);
-            // Withdraw gold
-            bank.Withdraw(price);
+            PlaceTower(position);
             // Placement successful
             return true;
         }
@@ -40,5 +42,37 @@ public class TowerMain : MonoBehaviour
             return false;
         }
 
+    }
+
+    private void PlaceTower(Transform position)
+    {
+        // Place tower
+        GameObject tower = Instantiate(this.gameObject, position.position, Quaternion.identity);
+
+        // Withdraw gold
+        bank.Withdraw(price);
+    }
+
+    IEnumerator Build()
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+            foreach(Transform childd in child)
+            {
+                childd.gameObject.SetActive(false);
+            }
+        }
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+
+            foreach (Transform childd in child)
+            {
+                childd.gameObject.SetActive(true);
+            }
+        }
     }
 }

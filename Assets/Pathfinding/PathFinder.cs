@@ -40,7 +40,12 @@ public class PathFinder : MonoBehaviour
     // Returns a new path
     public List<Node> GetNewPath()
     {
-        BreadthFirstSearch();
+        return GetNewPath(startCoordinates);
+    }
+
+    public List<Node> GetNewPath(Vector2Int startingCoordinates)
+    {
+        BreadthFirstSearch(startingCoordinates);
         return BuildPath();
     }
 
@@ -71,7 +76,7 @@ public class PathFinder : MonoBehaviour
 
     public void NotifyReceivers()
     {
-        BroadcastMessage("RecalculatePath", SendMessageOptions.DontRequireReceiver);
+        BroadcastMessage("RecalculatePath", false, SendMessageOptions.DontRequireReceiver);
     }
 
     // Resets the QUEUE / lists for a new BFS to be succesfuly completed.
@@ -86,7 +91,7 @@ public class PathFinder : MonoBehaviour
         reached.Clear();
     }
 
-    private void BreadthFirstSearch()
+    private void BreadthFirstSearch(Vector2Int startingCoordinates)
     {
         // Reset lists, queues, nodes
         ResetBFS();
@@ -94,9 +99,9 @@ public class PathFinder : MonoBehaviour
         bool isRunning = true;
 
         // Add the start node to the queue -> we will explore it's neighbors first
-        frontier.Enqueue(startNode);
+        frontier.Enqueue(grid[startingCoordinates]);
         // We have reached the startNode -> add it to reached
-        reached.Add(startNode.coordinates, startNode);
+        reached.Add(startingCoordinates, grid[startingCoordinates]);
 
         // While we have tiles queued and haven't reached the end, continue running
         while (frontier.Count > 0 && isRunning)
