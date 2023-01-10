@@ -22,8 +22,8 @@ public class NewTargetLocator : MonoBehaviour
 
     private void Start()
     {
-        mySphere = Instantiate(rangeSphere, this.transform);
-        mySphere.SetActive(false);
+        //mySphere = Instantiate(rangeSphere, this.transform);
+        //mySphere.SetActive(false);
         weaponSystem = this.transform.Find("BallistaTopMesh");
     }
 
